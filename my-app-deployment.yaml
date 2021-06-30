@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: nodejsproject
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejsproject
+  template:
+    metadata:
+      labels:
+        app: nodejsproject
+    spec:
+      containers:
+      - name: nodejsproject
+        image: 89amuk/test:myproject_activity2
+        ports:
+        - containerPort: 8080
+        env:
+        - name: nodeEnv
+          valueFrom:
+            configMapKeyRef:
+              name: my-app-cm
+              key: NODE_ENV
+        - name: hostName
+          valueFrom:
+            configMapKeyRef:
+              name: my-app-cm
+              key: HOST_NAME
+        - name: password
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secret
+              key: password
